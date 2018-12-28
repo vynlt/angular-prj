@@ -11,19 +11,17 @@
 
     <table mat-table [dataSource]="dataSource" class="example-table"
            matSort  >
-      <!-- Number Column -->
+   
       <ng-container matColumnDef="Id">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
         <td mat-cell *matCellDef="let row">{{row.Id}}</td>
       </ng-container>
 
-      <!-- Title Column -->
       <ng-container matColumnDef="Name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>NAME</th>
         <td mat-cell *matCellDef="let row">{{row.Name}}</td>
       </ng-container>
 
-      <!-- State Column -->
       <ng-container matColumnDef="CV">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>CV</th>
         <td mat-cell *matCellDef="let row">{{row.CV}}</td>
@@ -31,14 +29,32 @@
 
       <ng-container matColumnDef="IsCurrent">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>CURRENT</th>
-        <td mat-cell *matCellDef="let row">{{row.IsCurrent}}</td>
+        <td mat-cell *matCellDef="let row">
+          <span *ngIf="row.IsCurrent">Yes</span>
+          <span *ngIf="!row.IsCurrent">No</span>
+        </td>
       </ng-container>
 
-      <!-- Created Column -->
       <ng-container matColumnDef="LastUpdated">
         <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>LAST UPDATED</th>
-        <td mat-cell *matCellDef="let row">{{row.LastUpdated| date:'dd MMM yy HH:mm'}}</td>
+        <td mat-cell *matCellDef="let row">{{row.LastUpdated | date:'dd MMM yy HH:mm'}}</td>
       </ng-container>
+
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>ACTIONS</th>
+  
+        <td mat-cell *matCellDef="let row; let i=index;">
+          <button mat-icon-button color="primary" (click)="startEdit(row.Id, row.Name, row.CV, row.IsCurrent)">
+            <mat-icon aria-label="Edit">edit</mat-icon>
+          </button>
+  
+          <button mat-icon-button color="warn" (click)="deleteItem(row.Id, row.Name, row.CV, row.IsCurrent, row.LastUpdated)">
+            <mat-icon aria-label="Delete">delete</mat-icon>
+          </button>
+        </td>
+      </ng-container>
+
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -46,10 +62,9 @@
   </div>
 
   <mat-paginator [length]="resultsLength" [pageSizeOptions]="[5, 10]"></mat-paginator>
-
+  <button mat-icon-button color="primary" (click)="addNew()">
+    <mat-icon aria-label="Example icon-button with a heart icon">add</mat-icon>
+  </button>
 </div>
 
 
-<!-- Copyright 2018 Google Inc. All Rights Reserved.
-    Use of this source code is governed by an MIT-style license that
-    can be found in the LICENSE file at http://angular.io/license -->

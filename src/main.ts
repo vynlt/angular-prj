@@ -1,34 +1,47 @@
 import './polyfills';
 
-import {HttpClientModule} from '@angular/common/http';
-import {NgModule} from '@angular/core';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MatNativeDateModule} from '@angular/material';
-import {BrowserModule} from '@angular/platform-browser';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {DemoMaterialModule} from './material-module';
+import { HttpClientModule } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import {TableHttpExample} from './app/components/table/table-http';
+import { BrowserModule } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { DemoMaterialModule } from './material-module';
 
+import { TableHttpExample } from './app/components/table/table-http';
 
+import { EditDialog } from './app/components/dialog/EditDialog/edit.dialog'
+import { AddDialog } from './app/components/dialog/AddDialog/add.dialog'
+import {DeleteDialog} from './app/components/dialog/DeleteDialog/delete.dialog'
 
 @NgModule({
+
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     DemoMaterialModule,
-    MatNativeDateModule,
     ReactiveFormsModule,
   ],
-  entryComponents: [TableHttpExample],
-  declarations: [TableHttpExample],
-  bootstrap: [TableHttpExample],
+  entryComponents: [
+    TableHttpExample,
+    EditDialog,
+    AddDialog,
+    DeleteDialog
+  ],
+  declarations: [
+    TableHttpExample,
+    EditDialog,
+    AddDialog,
+    DeleteDialog
+  ],
+  bootstrap: [
+    TableHttpExample,],
   providers: []
 })
-export class AppModule {}
+export class AppModule { }
 
 platformBrowserDynamic().bootstrapModule(AppModule);
 
