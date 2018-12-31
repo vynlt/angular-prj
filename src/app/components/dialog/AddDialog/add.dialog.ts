@@ -3,6 +3,7 @@ import { Component, Inject } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
 import { AreaService } from '../../../services/area.service';
+import { of as observableOf } from 'rxjs';
 @Component({
     selector: 'add-dialog',
     templateUrl: 'add.dialog.html',
@@ -28,6 +29,13 @@ export class AddDialog {
     }
 
     public confirmAdd(): void {
-        this.dataService.addItem(this.data);
+        
+       this.dataService.addItem(this.data).subscribe(data => {
+        this.data = data
+        this.dialogRef.close({ data: this.data });
+      });
+      
     }
+
+   
 }

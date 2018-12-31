@@ -41,7 +41,12 @@ export class TableHttpExample implements OnInit {
     this.loadData();
   }
 
+  refresh() {
+    this.loadData();
+  }
+
   loadData = () => {
+
     this.exampleDatabase = new AreaService(this.http);
     this.exampleDatabase.getRepoIssues().pipe(
       map(data => {
@@ -82,18 +87,14 @@ export class TableHttpExample implements OnInit {
     });
   }
 
-  addNew = (Name: string, CV: string, IsCurrent: string) =>{
+  addNew = (Name: string, CV: string, IsCurrent: string) => {
     const dialogRef = this.dialog.open(AddDialog, {
       data: { Id: 0, Name: Name, CV: parseInt(CV), IsCurrent: IsCurrent, LastUpdated: null }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) {
-        
-        this.exampleDatabase.dataChange.value.push(this.dataService.getDialogData());
-        this.refreshTable();
+      console.log(result)
       
-      }
     });
 
   }
@@ -105,6 +106,7 @@ export class TableHttpExample implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+     
       if (result === 1) {
         const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.Id === this.id);
         this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
@@ -115,7 +117,6 @@ export class TableHttpExample implements OnInit {
 
   private refreshTable() {
     this.paginator._changePageSize(this.paginator.pageSize);
-
   }
 }
 

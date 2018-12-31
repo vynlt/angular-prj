@@ -5,7 +5,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { AreaApi } from '../interfaces/AreaApi'
 import { Area } from '../interfaces/Area'
 import * as Utils from '../utils/apiUtils'
-import { catchError, map } from 'rxjs/operators';
+import {  map } from 'rxjs/operators';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -29,12 +29,15 @@ export class AreaService {
   dialogData: any;
   dataSource: any;
 
-  constructor(private http: HttpClient) { }
+  constructor(private httpClient: HttpClient) { }
+
+
+
   getRepoIssues(): Observable<AreaApi> {
     const href = URL.root + URL.route;
     const requestUrl =
       `${href}?${URL.query}`;
-    return this.http.get<AreaApi>(requestUrl, httpOptions);
+    return this.httpClient.get<AreaApi>(requestUrl, httpOptions);
   }
 
   get data(): Area[] {
@@ -58,25 +61,16 @@ export class AreaService {
     }
 
   }
-  addItem(area: Area) {
+  addItem(area: Area): Observable<Area> {
     const href = URL.root + URL.route;
     const requestUrl = href;
-    this.http.post<AreaApi>(requestUrl, area, this.getHttpOptions(area)).pipe(
-      map(data => {
-        return data.payload.value;
-      }),
-    ).subscribe(data => {
-      this.dataSource = data;
-    }, (err: HttpErrorResponse) => {
-      console.log('Error occurred. Details: ' + err.name + ' ' + err.message);
-    })
-      ;
+   return this.httpClient.post<Area>(requestUrl, area, this.getHttpOptions(area))
   }
 
   updateItem(area: Area): void {
     const href = URL.root + URL.route;
     const requestUrl = `${href}(${area.Id})`;
-    this.http.put<Area>(requestUrl, area, this.getHttpOptions(area)).subscribe(data => {
+    this.httpClient.put<Area>(requestUrl, area, this.getHttpOptions(area)).subscribe(data => {
       this.dialogData = area;
     },
       (err: HttpErrorResponse) => {
@@ -88,8 +82,8 @@ export class AreaService {
   deleteItem(id: string): void {
     const href = URL.root + URL.route;
     const requestUrl = `${href}(${id})`;
-    this.http.delete(requestUrl, this.getHttpOptions(null)).subscribe(data => {
-      console.log(data['']);
+    this.httpClient.delete(requestUrl, this.getHttpOptions(null)).subscribe(data => {
+      console.log(data);
     },
       (err: HttpErrorResponse) => {
         console.log('Error occurred. Details: ' + err.name + ' ' + err.message);
