@@ -9,6 +9,7 @@ import { Area } from '../../interfaces/Area'
 import { EditDialog } from '../dialog/EditDialog/edit.dialog'
 import { AddDialog } from '../dialog/AddDialog/add.dialog';
 import { DeleteDialog } from '../dialog/DeleteDialog/delete.dialog';
+import {Dialog} from '../dialog/dialog';
 
 /**
  * @title Table retrieving data through HTTP
@@ -68,15 +69,31 @@ export class TableHttpExample implements OnInit {
     });
   }
 
+  public confirmAdd(dialogRef, data): void {
+    this.dataService.addItem(data).subscribe(data => {
+      data = data
+     dialogRef.close({ data: data });
+   });
+ }
+
   startEdit(Id: string, Name: string, CV: string, IsCurrent: string) {
     this.id = Id;
 
-    const dialogRef = this.dialog.open(EditDialog, {
+    const dialogRef = this.dialog.open(Dialog, {
       data: {Id: Id, Name: Name, CV: CV, IsCurrent: IsCurrent, LastUpdated: new Date()}
     });
+    let newArea;
 
-    dialogRef.afterClosed().subscribe(result => {
-      const newArea = result.data.payload;
+    dialogRef.componentInstance.dialogTitle = "Edit";
+    dialogRef.componentInstance.dialogBtn1 = "Submit";
+    dialogRef.componentInstance.dialogBtn2 = "Cancel";
+    dialogRef.componentInstance.dialogSubmit.subscribe((data) => {
+      this.dataService.addItem(data).subscribe(data => {
+        newArea = data
+      });
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
       delete newArea['@odata.context'];
       const foundIndex = this.dataSource.data.findIndex(x =>
         x.Id === this.id

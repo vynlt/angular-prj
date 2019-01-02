@@ -14,6 +14,7 @@ import { TableHttpExample } from './app/components/table/table-http';
 import { EditDialog } from './app/components/dialog/EditDialog/edit.dialog'
 import { AddDialog } from './app/components/dialog/AddDialog/add.dialog'
 import {DeleteDialog} from './app/components/dialog/DeleteDialog/delete.dialog'
+import {Dialog} from './app/components/dialog/dialog';
 
 @NgModule({
 
@@ -29,13 +30,15 @@ import {DeleteDialog} from './app/components/dialog/DeleteDialog/delete.dialog'
     TableHttpExample,
     EditDialog,
     AddDialog,
-    DeleteDialog
+    DeleteDialog,
+    Dialog
   ],
   declarations: [
     TableHttpExample,
     EditDialog,
     AddDialog,
-    DeleteDialog
+    DeleteDialog,
+    Dialog,
   ],
   bootstrap: [
     TableHttpExample,],
