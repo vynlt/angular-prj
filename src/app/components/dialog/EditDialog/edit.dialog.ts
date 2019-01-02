@@ -30,7 +30,11 @@ export class EditDialog {
     }
 
     stopEdit(): void {
-       
+
+        this.dataService.updateItem(this.data).subscribe(response => {
+            this.data = response
+            this.dialogRef.close({ data: this.data });
+          });
       }
 
       

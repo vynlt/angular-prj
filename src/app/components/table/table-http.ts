@@ -22,13 +22,11 @@ import { DeleteDialog } from '../dialog/DeleteDialog/delete.dialog';
 export class TableHttpExample implements OnInit {
   displayedColumns: string[] = ['Id', 'Name', 'CV', 'IsCurrent', 'LastUpdated', 'actions'];
   exampleDatabase: AreaService | null;
-  dataSource: MatTableDataSource<Area[]>;
+  dataSource: MatTableDataSource<Area>;
   pageSize = 0;
   resultsLength = 0;
   isLoadingResults = true;
   isRateLimitReached = false;
-
-  index: number;
   id: string;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -46,7 +44,6 @@ export class TableHttpExample implements OnInit {
   }
 
   loadData = () => {
-
     this.exampleDatabase = new AreaService(this.http);
     this.exampleDatabase.getRepoIssues().pipe(
       map(data => {
@@ -75,15 +72,19 @@ export class TableHttpExample implements OnInit {
     this.id = Id;
 
     const dialogRef = this.dialog.open(EditDialog, {
-      data: { Name: Name, CV: CV, IsCurrent: IsCurrent, LastUpdated: new Date() }
+      data: {Id: Id, Name: Name, CV: CV, IsCurrent: IsCurrent, LastUpdated: new Date()}
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) {
-        const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.Id === this.id);
-        this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
-        this.refreshTable();
-      }
+      const newArea = result.data.payload;
+      delete newArea['@odata.context'];
+      const foundIndex = this.dataSource.data.findIndex(x =>
+        x.Id === this.id
+      );
+      this.dataSource.data[foundIndex] = newArea;
+      this.dataSource = new MatTableDataSource(this.dataSource.data)
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator
     });
   }
 
@@ -93,8 +94,12 @@ export class TableHttpExample implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
-      
+      const newArea = result.data.payload;
+      delete newArea['@odata.context'];
+      this.dataSource.data.push(newArea)
+      this.dataSource = new MatTableDataSource(this.dataSource.data)
+      this.dataSource.sort = this.sort;
+      this.dataSource.paginator = this.paginator
     });
 
   }
@@ -106,18 +111,18 @@ export class TableHttpExample implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-     
       if (result === 1) {
-        const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.Id === this.id);
-        this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
-        this.refreshTable();
+        const foundIndex = this.dataSource.data.findIndex(x =>
+          x.Id === this.id
+        );
+        this.dataSource.data.splice(foundIndex, 1);
+        this.dataSource = new MatTableDataSource(this.dataSource.data)
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator
       }
     });
   }
 
-  private refreshTable() {
-    this.paginator._changePageSize(this.paginator.pageSize);
-  }
 }
 
 

@@ -19,6 +19,7 @@ export class DeleteDialog {
   }
 
   confirmDelete(): void {
-    this.dataService.deleteItem(this.data.Id);
+    const response = this.dataService.deleteItem(this.data.Id);
+    console.log(response)
   }
 }

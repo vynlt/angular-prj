@@ -1,17 +1,22 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Input} from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-import { AreaService } from '../../../services/area.service';
+import { AreaService } from '../../services/area.service';
 
 @Component({
-    selector: 'add-dialog',
-    templateUrl: 'add.dialog.html',
-    styleUrls: ['add.dialog.css']
+    selector: 'dialog',
+    templateUrl: 'dialog.html',
+    styleUrls: ['dialog.css']
 })
 
-export class AddDialog {
-    constructor(public dialogRef: MatDialogRef<AddDialog>,
+export class Dialog {
+    @Input() dialogTitle: string;
+    @Input() dialogBtn1: string;
+    @Input() dialogBtn2: string;
+    @Input() dialogSubmit: any;
+
+    constructor(public dialogRef: MatDialogRef<Dialog>,
         @Inject(MAT_DIALOG_DATA) public data: any, public dataService: AreaService
     ) { }
 

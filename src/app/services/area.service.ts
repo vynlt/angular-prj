@@ -25,9 +25,6 @@ const URL = {
 })
 export class AreaService {
 
-  dataChange: BehaviorSubject<Area[]> = new BehaviorSubject<Area[]>([]);
-  dialogData: any;
-  dataSource: any;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -40,17 +37,7 @@ export class AreaService {
     return this.httpClient.get<AreaApi>(requestUrl, httpOptions);
   }
 
-  get data(): Area[] {
-    return this.dataChange.value;
-  }
-
-  getDialogData() {
-    return this.dialogData;
-  }
-
-  getDataSource() {
-    return this.dataSource;
-  }
+  
 
   getHttpOptions = (data) => {
     return {
@@ -67,28 +54,16 @@ export class AreaService {
    return this.httpClient.post<Area>(requestUrl, area, this.getHttpOptions(area))
   }
 
-  updateItem(area: Area): void {
+  updateItem(area: Area): Observable<Area> {
     const href = URL.root + URL.route;
     const requestUrl = `${href}(${area.Id})`;
-    this.httpClient.put<Area>(requestUrl, area, this.getHttpOptions(area)).subscribe(data => {
-      this.dialogData = area;
-    },
-      (err: HttpErrorResponse) => {
-        console.log('Error occurred. Details: ' + err.name + ' ' + err.message);
-      }
-    );
+     return this.httpClient.put<Area>(requestUrl, area, this.getHttpOptions(area));
   }
 
-  deleteItem(id: string): void {
+  deleteItem(id: string): Observable<{}> {
     const href = URL.root + URL.route;
     const requestUrl = `${href}(${id})`;
-    this.httpClient.delete(requestUrl, this.getHttpOptions(null)).subscribe(data => {
-      console.log(data);
-    },
-      (err: HttpErrorResponse) => {
-        console.log('Error occurred. Details: ' + err.name + ' ' + err.message);
-      }
-    );
+   return this.httpClient.delete(requestUrl, this.getHttpOptions(null));
   }
 
 
