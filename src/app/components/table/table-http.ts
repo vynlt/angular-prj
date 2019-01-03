@@ -1,15 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatSort, MatTableDataSource, MatDialog } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, MatDialog, MatDialogRef } from '@angular/material';
 import { of as observableOf } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 
 import { AreaService } from '../../services/area.service'
-import { Area } from '../../interfaces/Area'
-import { EditDialog } from '../dialog/EditDialog/edit.dialog'
-import { AddDialog } from '../dialog/AddDialog/add.dialog';
-import { DeleteDialog } from '../dialog/DeleteDialog/delete.dialog';
-import {Dialog} from '../dialog/dialog';
+import { Area } from '../../interfaces/index'
+import {DialogText} from '../../constants/index'
+
+import { Dialog } from '../dialog/dialog-component';
 
 /**
  * @title Table retrieving data through HTTP
@@ -69,75 +68,93 @@ export class TableHttpExample implements OnInit {
     });
   }
 
-  public confirmAdd(dialogRef, data): void {
-    this.dataService.addItem(data).subscribe(data => {
-      data = data
-     dialogRef.close({ data: data });
-   });
- }
+
 
   startEdit(Id: string, Name: string, CV: string, IsCurrent: string) {
     this.id = Id;
 
-    const dialogRef = this.dialog.open(Dialog, {
-      data: {Id: Id, Name: Name, CV: CV, IsCurrent: IsCurrent, LastUpdated: new Date()}
-    });
-    let newArea;
-
-    dialogRef.componentInstance.dialogTitle = "Edit";
-    dialogRef.componentInstance.dialogBtn1 = "Submit";
-    dialogRef.componentInstance.dialogBtn2 = "Cancel";
-    dialogRef.componentInstance.dialogSubmit.subscribe((data) => {
-      this.dataService.addItem(data).subscribe(data => {
-        newArea = data
+    let dialogRef: MatDialogRef<Dialog> = this.dialog.open(Dialog,
+      {
+        data: { Id: Id, Name: Name, CV: parseFloat(CV), IsCurrent: IsCurrent, LastUpdated: new Date() }
       });
+
+
+    dialogRef.componentInstance.dialogTitle = DialogText.editTitle;
+    dialogRef.componentInstance.dialogBtn1 = DialogText.editAction1;
+    dialogRef.componentInstance.dialogBtn2 = DialogText.addAction2;
+    dialogRef.componentInstance.body = true;
+
+    dialogRef.componentInstance.dialogSubmit.subscribe((data) => {
+      this.dataService.updateItem(data).subscribe(data => {
+
+        let newArea = data.payload
+        delete newArea['@odata.context'];
+        const foundIndex = this.dataSource.data.findIndex(x =>
+          x.Id === this.id
+        );
+        this.dataSource.data[foundIndex] = newArea;
+        this.dataSource = new MatTableDataSource(this.dataSource.data)
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator
+        dialogRef.close();
+      });
+
     });
 
-    dialogRef.afterClosed().subscribe(() => {
-      delete newArea['@odata.context'];
-      const foundIndex = this.dataSource.data.findIndex(x =>
-        x.Id === this.id
-      );
-      this.dataSource.data[foundIndex] = newArea;
-      this.dataSource = new MatTableDataSource(this.dataSource.data)
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator
-    });
+
   }
 
   addNew = (Name: string, CV: string, IsCurrent: string) => {
-    const dialogRef = this.dialog.open(AddDialog, {
-      data: { Id: 0, Name: Name, CV: parseInt(CV), IsCurrent: IsCurrent, LastUpdated: null }
+    const dialogRef = this.dialog.open(Dialog, {
+      data: { Id: 0, Name: Name, CV: parseFloat(CV), IsCurrent: IsCurrent, LastUpdated: null }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      const newArea = result.data.payload;
-      delete newArea['@odata.context'];
-      this.dataSource.data.push(newArea)
-      this.dataSource = new MatTableDataSource(this.dataSource.data)
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator
+    dialogRef.componentInstance.dialogTitle = DialogText.addTitle;
+    dialogRef.componentInstance.dialogBtn1 = DialogText.addAction1;
+    dialogRef.componentInstance.dialogBtn2 = DialogText.addAction2;
+    dialogRef.componentInstance.body = true;
+
+    dialogRef.componentInstance.dialogSubmit.subscribe((data) => {
+      this.dataService.addItem(data).subscribe(data => {
+
+        let newArea = data.payload
+        delete newArea['@odata.context'];
+        this.dataSource.data.push(newArea)
+        this.dataSource = new MatTableDataSource(this.dataSource.data)
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator
+        dialogRef.close();
+      });
     });
 
   }
 
   deleteItem(Id: string, Name: string, CV: string, IsCurrent: string, LastUpdated: string) {
     this.id = Id;
-    const dialogRef = this.dialog.open(DeleteDialog, {
-      data: { Id: Id, Name: Name, CV: parseInt(CV), IsCurrent: IsCurrent, LastUpdated: LastUpdated }
+    const dialogRef = this.dialog.open(Dialog, {
+      data: { Id: Id, Name: Name, CV: parseFloat(CV), IsCurrent: IsCurrent, LastUpdated: LastUpdated }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) {
-        const foundIndex = this.dataSource.data.findIndex(x =>
-          x.Id === this.id
-        );
-        this.dataSource.data.splice(foundIndex, 1);
-        this.dataSource = new MatTableDataSource(this.dataSource.data)
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator
-      }
+    dialogRef.componentInstance.dialogTitle = DialogText.deleteTitle;
+    dialogRef.componentInstance.dialogBtn1 = DialogText.deleteAction1;
+    dialogRef.componentInstance.dialogBtn2 = DialogText.deleteAction2;
+    dialogRef.componentInstance.body = false;
+
+    dialogRef.componentInstance.dialogSubmit.subscribe((data) => {
+      this.dataService.deleteItem(this.id).subscribe(data => {
+        if (data.payload.value) {
+          const foundIndex = this.dataSource.data.findIndex(x =>
+            x.Id === this.id
+          );
+          this.dataSource.data.splice(foundIndex, 1);
+          this.dataSource = new MatTableDataSource(this.dataSource.data)
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator
+        }
+        dialogRef.close();
+      });
     });
+
   }
 
 }

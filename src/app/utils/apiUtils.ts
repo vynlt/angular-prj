@@ -13,7 +13,7 @@ import { configuration } from '../../configuration';
     return s4() + s4() + s4() + s4() + s4() + s4() + s4() + s4();
 };
 
-export const getHmacString = (data) => {
+const getHmacString = (data) => {
     const APP_ID = configuration.APP_ID;
     const SECRET_KEY = configuration.SECRET_KEY;
 
@@ -33,3 +33,12 @@ export const getHmacString = (data) => {
     const author = APP_ID + ":" + base64sign + ":" + uuid + ":" + unixTime;
     return 'sign:' + author;
 };
+
+export const getHttpOptions = (data) => {
+    return {
+      headers: new HttpHeaders({
+        'guid': '289d10cb-639b-43f3-9fc1-b232e5ae3371',
+        'hmac': getHmacString(data)
+      })
+    }
+}

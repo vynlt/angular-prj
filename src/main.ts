@@ -11,10 +11,8 @@ import { DemoMaterialModule } from './material-module';
 
 import { TableHttpExample } from './app/components/table/table-http';
 
-import { EditDialog } from './app/components/dialog/EditDialog/edit.dialog'
-import { AddDialog } from './app/components/dialog/AddDialog/add.dialog'
-import {DeleteDialog} from './app/components/dialog/DeleteDialog/delete.dialog'
-import {Dialog} from './app/components/dialog/dialog';
+
+import {Dialog} from './app/components/dialog/dialog-component';
 
 @NgModule({
 
@@ -28,16 +26,10 @@ import {Dialog} from './app/components/dialog/dialog';
   ],
   entryComponents: [
     TableHttpExample,
-    EditDialog,
-    AddDialog,
-    DeleteDialog,
     Dialog
   ],
   declarations: [
     TableHttpExample,
-    EditDialog,
-    AddDialog,
-    DeleteDialog,
     Dialog,
   ],
   bootstrap: [

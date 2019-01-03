@@ -1,16 +1,22 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, EventEmitter } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-import { AreaService } from '../../../services/area.service';
+import { AreaService } from '../../services/area.service';
 @Component({
-    selector: 'edit-dialog',
-    templateUrl: 'edit.dialog.html',
-    styleUrls: ['edit.dialog.css']
+    selector: 'dialog-component',
+    templateUrl: 'dialog-component.html',
+    styleUrls: ['dialog-component.css']
 })
 
-export class EditDialog {
-    constructor(public dialogRef: MatDialogRef<EditDialog>,
+export class Dialog {
+    public dialogTitle: string;
+    public dialogBtn1: string;
+    public dialogBtn2: string;
+    public dialogSubmit = new EventEmitter();
+    public body: boolean;
+
+    constructor(public dialogRef: MatDialogRef<Dialog>,
         @Inject(MAT_DIALOG_DATA) public data: any, public dataService: AreaService
     ) { }
 
@@ -30,11 +36,7 @@ export class EditDialog {
     }
 
     stopEdit(): void {
-
-        this.dataService.updateItem(this.data).subscribe(response => {
-            this.data = response
-            this.dialogRef.close({ data: this.data });
-          });
+        this.dialogSubmit.emit(this.data);
       }
 
       

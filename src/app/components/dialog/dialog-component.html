@@ -1,0 +1,36 @@
+<div class="container">
+  <h3 mat-dialog-title>{{dialogTitle}}</h3>
+
+  <form  class="mat-dialog-content" (ngSubmit)="submit" #formControl="ngForm">
+    <div *ngIf="body">
+        <div class="form">
+            <mat-form-field color="primary">
+              <input matInput #input class="form-control" placeholder="Name" [(ngModel)]="data.Name" name="Name" required>
+              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
+          </div>
+      
+          <div class="form">
+            <mat-form-field color="primary">
+              <input type="number" step=".1" matInput #input class="form-control" placeholder="CV" [(ngModel)]="data.CV" name="CV" required>
+              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
+          </div>
+      
+          <div class="form">
+            <mat-form-field color="primary">
+              <mat-select [(ngModel)]="data.IsCurrent" name="IsCurrent">
+                <mat-option [value]="true">Yes</mat-option>
+                <mat-option [value]="false">No</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+    </div>
+    
+
+    <div mat-dialog-actions>
+      <button mat-button [type]="submit" [disabled]="!formControl.valid" (click)="stopEdit()">{{dialogBtn1}}</button>
+      <button mat-button (click)="onNoClick()" tabindex="-1">{{dialogBtn2}}</button>
+    </div>
+  </form>
+</div>
