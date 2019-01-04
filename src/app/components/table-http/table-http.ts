@@ -90,7 +90,7 @@ export class TableHttpExample implements OnInit {
         let newArea = data.payload
         delete newArea['@odata.context'];
         const foundIndex = this.dataSource.data.findIndex(x =>
-          x.Id === this.id
+          x.Id.toString() === this.id
         );
         this.dataSource.data[foundIndex] = newArea;
         this.dataSource = new MatTableDataSource(this.dataSource.data)
@@ -144,7 +144,7 @@ export class TableHttpExample implements OnInit {
       this.dataService.deleteItem(this.id).subscribe(data => {
         if (data.payload.value) {
           const foundIndex = this.dataSource.data.findIndex(x =>
-            x.Id === this.id
+            x.Id.toString() === this.id
           );
           this.dataSource.data.splice(foundIndex, 1);
           this.dataSource = new MatTableDataSource(this.dataSource.data)
