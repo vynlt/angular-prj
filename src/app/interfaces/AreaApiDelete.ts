@@ -1,3 +1,3 @@
 export interface AreaApiDelete {
-    payload:  {value} ;
+    payload:  {value: boolean} ;
 }

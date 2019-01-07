@@ -40,9 +40,9 @@ export interface Io {
     RankLevelId: string;
     LastUpdatedDate: string;
     LastUpdatedBy: string;
-    Area: Area,
-    Status: Status,
-    RankingCategory: RankingCategory,
-    RankLevel: any,
-    IOStakeHolders: any
+    Area: Area;
+    Status: Status;
+    RankingCategory: RankingCategory;
+    RankLevel: any;
+    IOStakeHolders: any;
 }

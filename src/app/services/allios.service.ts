@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable} from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 
-import {Area, AreaApi, AreaApiUpdate, AreaApiDelete } from '../interfaces/index'
+import {Area, IoApi, AreaApiUpdate, AreaApiDelete } from '../interfaces/index'
 import * as Utils from '../utils/apiUtils'
 import {URL} from '../constants/index'
 
@@ -14,11 +14,11 @@ export class AllIOService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getRepoIssues(): Observable<{}> {
+  getRepoIssues(): Observable<IoApi> {
     const href = URL.root + URL.allIORoute;
     const requestUrl =
-      `${href}?${URL.allIORoute}`;
-    return this.httpClient.get(requestUrl, Utils.getHttpOptions(null));
+      `${href}?${URL.allIOQuery}`;
+    return this.httpClient.get<IoApi>(requestUrl, Utils.getHttpOptions(null));
   }
 
   addItem(area: Area): Observable<AreaApiUpdate> {

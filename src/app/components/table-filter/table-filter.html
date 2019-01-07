@@ -1,0 +1,115 @@
+<div class="example-container mat-elevation-z8">
+    <div class="example-loading-shade"
+         *ngIf="isLoadingResults || isRateLimitReached">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+         API rate limit has been reached. It will be reset in one minute.
+      </div>
+    </div>
+  
+    <div class="example-table-container">
+  
+      <table mat-table [dataSource]="dataSource" class="example-table"
+             matSort  >
+     
+        <ng-container matColumnDef="Id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let row">{{row.Id}}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="InitiatorFullName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>INITIATOR</th>
+          <td mat-cell *matCellDef="let row">{{row.InitiatorFullName}}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="Area.Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>AREA</th>
+          <td mat-cell *matCellDef="let row">{{row.Area.Name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Title">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>TITLE</th>
+          <td mat-cell *matCellDef="let row">{{row.Title}}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="Status.Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>STATUS</th>
+          <td mat-cell *matCellDef="let row">{{row.Status.Name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="RankingCategory.Name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>TYPE</th>
+          <td mat-cell *matCellDef="let row">{{row.RankingCategory.Name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="RankingScore">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>SCORE</th>
+          <td mat-cell *matCellDef="let row">{{row.RankingScore}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="RankLevelId">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>RANK</th>
+          <td mat-cell *matCellDef="let row">{{row.RankLevelId}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="PCRNumber">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>PCR</th>
+          <td mat-cell *matCellDef="let row">{{row.PCRNumber}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="CreatedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>CREATED</th>
+          <td mat-cell *matCellDef="let row">{{row.CreatedDate}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ReviewedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>REVIEWED</th>
+          <td mat-cell *matCellDef="let row">{{row.ReviewedDate}}</td>
+        </ng-container>
+  
+        <ng-container matColumnDef="ApprovedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>APPROVED</th>
+          <td mat-cell *matCellDef="let row">{{row.ApprovedDate}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="SubmittedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>SUBMITTED</th>
+          <td mat-cell *matCellDef="let row">{{row.SubmittedDate}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="LastUpdatedBy">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>LAST UPDATE</th>
+          <td mat-cell *matCellDef="let row">{{row.LastUpdatedBy}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="EquipmentTags">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>EQUIPMENT TAGS</th>
+          <td mat-cell *matCellDef="let row">{{row.EquipmentTags}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="IOStakeHolders.FullName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>STAKEHOLDERS</th>
+          <td mat-cell *matCellDef="let row">{{row.IOStakeHolders.FullName}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="EstimatedCostNZD">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>COST</th>
+          <td mat-cell *matCellDef="let row">{{row.EstimatedCostNZD}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="Budget">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>BUDGET</th>
+          <td mat-cell *matCellDef="let row">{{row.Budget}}</td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  
+    <mat-paginator [length]="resultsLength" [pageSizeOptions]="[5, 10, 40]"></mat-paginator>
+    
+  </div>
+  
+  
+  

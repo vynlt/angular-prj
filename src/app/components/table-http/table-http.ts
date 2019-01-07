@@ -141,7 +141,9 @@ export class TableHttpExample implements OnInit {
     dialogRef.componentInstance.body = false;
 
     dialogRef.componentInstance.dialogSubmit.subscribe((data) => {
+      
       this.dataService.deleteItem(this.id).subscribe(data => {
+        console.log(data)
         if (data.payload.value) {
           const foundIndex = this.dataSource.data.findIndex(x =>
             x.Id.toString() === this.id
